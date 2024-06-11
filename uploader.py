@@ -42,4 +42,4 @@ def uploaded_file(hashing, filename):
         abort(404)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8004)
+    app.run(debug=True, port=5000)
