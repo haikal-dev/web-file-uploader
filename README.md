@@ -35,7 +35,7 @@ This is a simple web file uploader built using Python and Flask. It includes a s
 
 1. Run the application:
     ```bash
-    ./app.py
+    ./uploader.py
     ```
 
 2. Open a web browser and navigate to `http://127.0.0.1:5000/`.
