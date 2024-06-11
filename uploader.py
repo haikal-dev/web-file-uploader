@@ -18,10 +18,8 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 @app.route('/', methods=['GET'])
-def list_files():
-    #files = os.listdir(app.config['UPLOAD_FOLDER'])
-    #return jsonify(files=files)
-    return render_template_string(open('/home/dev/data/uploader.html').read())
+def uploader():
+    return render_template_string(open('./uploader.html').read())
 
 @app.route('/', methods=['POST'])
 def upload_file():
