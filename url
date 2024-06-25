@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+
+import argparse
+import hashlib
+import hmac
+from datetime import datetime
+
+def generate_hash(filename, secret_key, date):
+    data = f"{filename}{date}{secret_key}"
+    return hashlib.sha256(data.encode()).hexdigest()
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Generate a hash for a given filename using a secret key.')
+    parser.add_argument('filename', type=str, help='The name of the file to hash.')
+    #parser.add_argument('secret_key', type=str, help='The secret key to use for hashing.')
+
+    args = parser.parse_args()
+
+    #hash_value = generate_hash(args.filename, args.secret_key)
+    today_date = datetime.utcnow().strftime('%Y-%m-%d')
+    hash_value = generate_hash(args.filename, 'haikal100', today_date)[:8]
+    print(f'https://www.fileserver.com/d/{hash_value}/{args.filename}')
