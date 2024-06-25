@@ -36,7 +36,7 @@ def upload_file():
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
         file.save(filepath)
         return f"OK\n"
-    
+
 @app.route('/d/<hashing>/<filename>')
 def uploaded_file(hashing, filename):
     today_date = datetime.utcnow().strftime('%Y-%m-%d')
