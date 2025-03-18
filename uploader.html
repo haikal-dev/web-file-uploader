@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Web File Uploader</title>
+    <title>File Uploader</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,10 +33,24 @@
             font-size: 1.1em;
         }
 
-        #progress {
+        #progress-container {
+            width: 100%;
+            background: #ddd;
+            border-radius: 5px;
+            overflow: hidden;
             margin-top: 10px;
-            font-size: 1.2em;
-            color: #4CAF50;
+            height: 20px;
+            display: none;
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #4CAF50;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            transition: width 0.3s ease;
         }
 
         form {
@@ -83,7 +97,9 @@
 <div id="container">
     <h2>File Uploader</h2>
     <div id="message"></div>
-    <div id="progress">0%</div>
+    <div id="progress-container">
+        <div id="progress-bar">0%</div>
+    </div>
     <form id="uploader" action="http://127.0.0.1:5000/" method="POST" enctype="multipart/form-data">
         <input type="file" name="file" required />
         <input type="submit" value="Upload" />
@@ -102,17 +118,26 @@
         const xhr = new XMLHttpRequest();
         const formData = new FormData();
         formData.append('file', file);
+        
+        const progressContainer = document.getElementById('progress-container');
+        const progressBar = document.getElementById('progress-bar');
+        progressContainer.style.display = 'block';
 
         xhr.upload.addEventListener('progress', function(event) {
             if (event.lengthComputable) {
                 const percentComplete = Math.round((event.loaded / event.total) * 100);
-                document.getElementById('progress').innerText = percentComplete + '%';
+                progressBar.style.width = percentComplete + '%';
+                progressBar.innerText = percentComplete + '%';
             }
         });
 
         xhr.addEventListener('load', function() {
             document.getElementById('message').innerText = 'Upload complete!';
-            document.getElementById('progress').innerText = '100%';
+            progressBar.style.width = '100%';
+            progressBar.innerText = '100%';
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
         });
 
         xhr.addEventListener('error', function() {
@@ -158,6 +183,24 @@
         document.querySelector('input[type="file"]').files = files;
         upload(files[0]);
     }
+
+    document.addEventListener('paste', function(event) {
+        const clipboardItems = event.clipboardData.items;
+        let imageFound = false;
+
+        for (const item of clipboardItems) {
+            if (item.type.startsWith('image/')) {
+                const file = item.getAsFile();
+                upload(file);
+                imageFound = true;
+                break;
+            }
+        }
+
+        if (!imageFound) {
+            document.getElementById('message').innerText = 'No image found in clipboard.';
+        }
+    });
 </script>
 </body>
 </html>
